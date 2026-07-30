@@ -4,13 +4,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 
-public class MenuPanel extends JPanel {
+public class StorageTab extends JPanel {
 
-    public MenuPanel() {
+    public StorageTab() {
         setLayout(new BorderLayout());
 
         JLabel titleLabel = new JLabel(
-                "Main Menu"
+                "Storage Menu"
         );
 
         // Temp

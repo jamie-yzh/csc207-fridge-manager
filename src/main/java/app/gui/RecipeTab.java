@@ -4,9 +4,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
 
-public class RecipePanel extends JPanel {
+public class RecipeTab extends JPanel {
 
-    public RecipePanel() {
+    public RecipeTab() {
         setLayout(new BorderLayout());
 
         JLabel titleLabel = new JLabel(

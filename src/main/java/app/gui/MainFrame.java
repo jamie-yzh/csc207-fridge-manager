@@ -22,7 +22,7 @@ public class MainFrame extends JFrame {
         );
 
         // Set window size/dimension
-        setSize(1000, 750);
+        setSize(1000, 850);
         setMinimumSize(new Dimension(700, 500));
         // Window centering, on screen center by default (null)
         setLocationRelativeTo(null);
@@ -44,22 +44,21 @@ public class MainFrame extends JFrame {
         // Panel 1
         tabbedPane.addTab(
                 "Menu",
-                new MenuPanel()
+                new MenuTab()
         );
 
         // Panel 2
         tabbedPane.addTab(
                 "Storage",
-                new StoragePanel()
+                new StorageTab()
         );
 
         // Panel 3
         tabbedPane.addTab(
-                "Menu",
-                new RecipePanel()
+                "Recipe",
+                new RecipeTab()
         );
 
         return tabbedPane;
     }
 }
-
