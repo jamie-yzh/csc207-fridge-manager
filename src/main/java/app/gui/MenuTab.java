@@ -13,6 +13,7 @@ public class MenuTab extends JPanel {
 
     private static final int OUTER_PADDING = 16;
     private static final int PANEL_SPACING = 5;
+    private static final Color BACKGROUND_COLOR = new Color(204, 204, 204);
 
     public MenuTab() {
         configurePanel();
@@ -22,11 +23,7 @@ public class MenuTab extends JPanel {
     private void configurePanel() {
         setLayout(new GridBagLayout());
 
-        setBackground(
-                // Color Reference: https://teaching.csse.uwa.edu.au/units/CITS1001/colorinfo.html
-                // Light grey "204-204-204"
-                new Color(204, 204, 204)
-        );
+        setBackground(BACKGROUND_COLOR);
 
         setBorder(
                 BorderFactory.createEmptyBorder(
@@ -51,70 +48,67 @@ public class MenuTab extends JPanel {
         FoodLogging foodLoggingPanel =
                 new FoodLogging();
 
+        JPanel leftColumn = createColumnPanel();
+        JPanel rightColumn = createColumnPanel();
+
         positionPanel(
+                leftColumn,
                 progressPanel,
                 0,
-                0,
-                6,
-                3,
-                0.52,
+                0.6
+        );
+
+        positionPanel(
+                leftColumn,
+                eatenTodayPanel,
+                1,
                 0.4
         );
 
         positionPanel(
+                rightColumn,
                 profilePanel,
-                6,
                 0,
-                4,
-                4,
-                0.48,
-                0.55
+                0.0
         );
 
         positionPanel(
-                eatenTodayPanel,
-                0,
-                3,
-                6,
-                2,
-                0.6,
-                0.25
-        );
-
-        positionPanel(
+                rightColumn,
                 foodLoggingPanel,
-                6,
-                4,
-                4,
                 1,
-                0.4,
-                0.15
+                0.0
         );
+
+        addVerticalSpacer(rightColumn, 2);
+
+        positionColumn(leftColumn, 0, 0.62);
+        positionColumn(rightColumn, 1, 0.38);
+    }
+
+    private JPanel createColumnPanel() {
+        JPanel columnPanel = new JPanel(
+                new GridBagLayout()
+        );
+
+        columnPanel.setOpaque(false);
+        return columnPanel;
     }
 
     private void positionPanel(
+            JPanel column,
             JPanel panel,
-            int gridX,
             int gridY,
-            int gridWidth,
-            int gridHeight,
-            double weightX,
             double weightY
     ) {
         GridBagConstraints constraints = new GridBagConstraints();
 
         // Panel starts at grid position (gridX, gridY)
-        constraints.gridx = gridX;
+        constraints.gridx = 0;
         constraints.gridy = gridY;
-
-        // Panel occupies gridHeight amount of grid columns
-        // and gridWidth amount of grid rows
-        constraints.gridheight = gridHeight;
-        constraints.gridwidth = gridWidth;
 
         // Panel receives weightX portion of expandable width relative to
         // weightY portion of expandable height when the window scales
-        constraints.weightx = weightX;
+        constraints.weightx = 1.0;
         constraints.weighty = weightY;
 
         constraints.fill = GridBagConstraints.BOTH;
@@ -128,6 +122,45 @@ public class MenuTab extends JPanel {
                 PANEL_SPACING
         );
 
-        add(panel, constraints);
+        column.add(panel, constraints);
+    }
+
+    private void addVerticalSpacer(
+            JPanel column,
+            int gridY
+    ) {
+        JPanel spacing = new JPanel();
+
+        spacing.setOpaque(false);
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        constraints.gridx = 0;
+        constraints.gridy = gridY;
+        constraints.weightx = 1.0;
+
+        // Spacing receives all remaining unused vertical space
+        constraints.weighty = 1.0;
+        constraints.fill = GridBagConstraints.BOTH;
+
+        column.add(spacing, constraints);
+    }
+
+    private void positionColumn(
+            JPanel column,
+            int gridX,
+            double weightX
+    ) {
+        GridBagConstraints constraints = new GridBagConstraints();
+
+        constraints.gridx = gridX;
+        constraints.gridy = 0;
+
+        constraints.weightx = weightX;
+        constraints.weighty = 1.0;
+
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.anchor = GridBagConstraints.NORTHWEST;
+
+        add(column, constraints);
     }
 }

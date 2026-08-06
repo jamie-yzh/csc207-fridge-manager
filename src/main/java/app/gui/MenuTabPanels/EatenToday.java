@@ -173,8 +173,13 @@ public class EatenToday extends RoundPanel {
         table.setShowHorizontalLines(true);
 
         table.setGridColor(Color.LIGHT_GRAY);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.setRowSelectionAllowed(false);
+        table.setColumnSelectionAllowed(false);
+        table.setCellSelectionEnabled(false);
+        table.setFocusable(false);
+        table.setRequestFocusEnabled(false);
         table.getTableHeader().setReorderingAllowed(false);
+        table.getTableHeader().setFocusable(false);
 
         table.getColumnModel().getColumn(0).setPreferredWidth(250);
         table.getColumnModel().getColumn(1).setPreferredWidth(70);
