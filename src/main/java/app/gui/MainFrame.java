@@ -41,19 +41,19 @@ public class MainFrame extends JFrame {
     private JTabbedPane createTabbedPane() {
         JTabbedPane tabbedPane = new JTabbedPane();
 
-        // Panel 1
+        // Tab 1
         tabbedPane.addTab(
-                "Menu",
+                "Nutrition",
                 new MenuTab()
         );
 
-        // Panel 2
+        // Tab 2
         tabbedPane.addTab(
                 "Storage",
                 new StorageTab()
         );
 
-        // Panel 3
+        // Tab 3
         tabbedPane.addTab(
                 "Recipe",
                 new RecipeTab()
