@@ -95,7 +95,7 @@ public class NutritionProgress extends RoundPanel {
                 "Carbs",
                 122,
                 220,
-                "Kcal",
+                "g",
                 CARBS_COLOR
         );
 

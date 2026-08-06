@@ -331,7 +331,7 @@ public class Profile extends RoundPanel {
         GridBagConstraints inputConstraints = new GridBagConstraints();
 
         inputConstraints.gridx = 0;
-        inputConstraints.gridx = 1;
+        inputConstraints.gridy = 1;
         inputConstraints.weightx = 1.0;
         inputConstraints.fill = GridBagConstraints.HORIZONTAL;
 
