@@ -4,6 +4,8 @@ import app.gui.MenuTabPanels.EatenToday;
 import app.gui.MenuTabPanels.FoodLogging;
 import app.gui.MenuTabPanels.NutritionProgress;
 import app.gui.MenuTabPanels.Profile;
+import interface_adapter.nutrition.NutritionController;
+import interface_adapter.nutrition.NutritionViewModel;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
@@ -15,7 +17,16 @@ public class MenuTab extends JPanel {
     private static final int PANEL_SPACING = 5;
     private static final Color BACKGROUND_COLOR = new Color(204, 204, 204);
 
-    public MenuTab() {
+    private final NutritionController controller;
+    private final NutritionViewModel viewModel;
+
+    public MenuTab(
+            NutritionController controller,
+            NutritionViewModel viewModel
+    ) {
+        this.controller = controller;
+        this.viewModel = viewModel;
+
         configurePanel();
         createPanels();
     }
@@ -37,10 +48,10 @@ public class MenuTab extends JPanel {
 
     private void createPanels() {
         NutritionProgress progressPanel =
-                new NutritionProgress();
+                new NutritionProgress(viewModel);
 
         Profile profilePanel =
-                new Profile();
+                new Profile(controller, viewModel);
 
         EatenToday eatenTodayPanel =
                 new EatenToday();

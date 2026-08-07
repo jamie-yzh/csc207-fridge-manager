@@ -2,6 +2,8 @@ package app.gui.MenuTabPanels;
 
 import app.gui.components.ProgressBar;
 import app.gui.components.RoundPanel;
+import interface_adapter.nutrition.NutrientGoalView;
+import interface_adapter.nutrition.NutritionViewModel;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -9,6 +11,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.awt.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class NutritionProgress extends RoundPanel {
 
@@ -22,16 +26,38 @@ public class NutritionProgress extends RoundPanel {
 
     private static final Color FAT_COLOR = new Color(102, 0, 153);
 
+    /** Shown until a goal has been calculated — better than a misleading 0 / 0. */
+    private static final String NO_GOAL_YET = "— / —";
 
-    public NutritionProgress() {
+    /**
+     * The two widgets that make up one row. They are kept in a field (rather than
+     * being built and forgotten) so a new goal can update them in place.
+     */
+    private record Row(JLabel valueLabel, ProgressBar bar) {
+    }
+
+    private final NutritionViewModel viewModel;
+
+    /** One row per nutrient, keyed by name so order never matters. */
+    private final Map<String, Row> rows = new LinkedHashMap<>();
+
+    public NutritionProgress(
+            NutritionViewModel viewModel
+    ) {
         super(
                 18,
                 Color.WHITE,
                 BORDER_COLOR
         );
 
+        this.viewModel = viewModel;
+
         configurePanel();
         createComponents();
+
+        viewModel.addPropertyChangeListener(
+                event -> showGoal()
+        );
     }
 
     private void configurePanel() {
@@ -76,49 +102,56 @@ public class NutritionProgress extends RoundPanel {
         add(Box.createVerticalStrut(14));
 
         addProgressBar(
-                "Calories",
-                1240,
-                2000,
+                NutrientGoalView.CALORIES,
                 "Kcal",
                 CALORIE_COLOR
         );
 
         addProgressBar(
-                "Protein",
-                68,
-                120,
+                NutrientGoalView.PROTEIN,
                 "g",
                 PROTEIN_COLOR
         );
 
         addProgressBar(
-                "Carbs",
-                122,
-                220,
+                NutrientGoalView.CARBS,
                 "g",
                 CARBS_COLOR
         );
 
         addProgressBar(
-                "Fat",
-                50,
-                65,
+                NutrientGoalView.FAT,
                 "g",
                 FAT_COLOR
+        );
+
+        // The view model may already hold a goal (e.g. a saved profile).
+        showGoal();
+    }
+
+    /**
+     * Redraw every row from the view model. Rows the view model has nothing for
+     * are left showing the "no goal yet" placeholder.
+     */
+    private void showGoal() {
+        rows.forEach(
+                (nutrientName, row) -> viewModel.getNutrient(nutrientName).ifPresent(
+                        nutrient -> {
+                            row.valueLabel().setText(nutrient.amount());
+                            row.bar().setMax(nutrient.target());
+                            row.bar().setValue(nutrient.current());
+                        }
+                )
         );
     }
 
     private void addProgressBar(
             String nutrientName,
-            int currentValue,
-            int targetValue,
             String unit,
             Color progressColor
     ) {
         JPanel sectionPanel = createProgressBar(
                 nutrientName,
-                currentValue,
-                targetValue,
                 unit,
                 progressColor
         );
@@ -130,8 +163,6 @@ public class NutritionProgress extends RoundPanel {
 
     private JPanel createProgressBar(
             String nutrientName,
-            int currentValue,
-            int targetValue,
             String unit,
             Color progressColor
     ) {
@@ -162,18 +193,24 @@ public class NutritionProgress extends RoundPanel {
         );
 
         JLabel valueLabel = new JLabel(
-                currentValue + " / " + targetValue + " " + unit
+                NO_GOAL_YET + " " + unit
         );
 
         labelPanel.add(nameLabel, BorderLayout.WEST);
         labelPanel.add(valueLabel, BorderLayout.EAST);
 
+        // An empty bar to start; showGoal() fills it once a goal exists.
         ProgressBar progressBar =
                 new ProgressBar(
-                        currentValue,
-                        targetValue,
+                        0,
+                        0,
                         progressColor
                 );
+
+        rows.put(
+                nutrientName,
+                new Row(valueLabel, progressBar)
+        );
 
         labelPanel.setAlignmentX(LEFT_ALIGNMENT);
         progressBar.setAlignmentX(LEFT_ALIGNMENT);

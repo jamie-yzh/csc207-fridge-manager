@@ -43,8 +43,8 @@ public class ProgressBar extends JComponent {
 
         graphics2D.setColor(trackColor);
 
-        // Renders bar
-        graphics.fillRoundRect(
+        // Renders bar — must use graphics2D, the copy the track colour was set on.
+        graphics2D.fillRoundRect(
                 0,
                 0,
                 width,

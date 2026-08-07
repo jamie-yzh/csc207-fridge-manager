@@ -1,5 +1,7 @@
 package app.gui;
 
+import app.Config;
+
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
@@ -7,6 +9,9 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 
 public class MainFrame extends JFrame {
+
+    /** Builds the wired-up tabs; the window itself stays free of plumbing. */
+    private final Config config = new Config();
 
     public MainFrame() {
         configureWindow();
@@ -44,7 +49,7 @@ public class MainFrame extends JFrame {
         // Tab 1
         tabbedPane.addTab(
                 "Nutrition",
-                new MenuTab()
+                config.createMenuTab()
         );
 
         // Tab 2

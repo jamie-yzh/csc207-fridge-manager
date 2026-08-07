@@ -10,8 +10,10 @@ public class Application {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {});
-        MainFrame mainFrame = new MainFrame();
-        mainFrame.setVisible(true);
+        // Swing screens must be built and shown on the event-dispatch thread.
+        SwingUtilities.invokeLater(() -> {
+            MainFrame mainFrame = new MainFrame();
+            mainFrame.setVisible(true);
+        });
     }
 }
